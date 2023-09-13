@@ -1,0 +1,11 @@
+# Build results
+[Dd]ebug/
+
+*.user
+
+*.json
+
+.vs
+
+*.sln
+*.vcxproj*
