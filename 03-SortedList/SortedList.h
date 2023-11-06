@@ -3,16 +3,19 @@
 
 #include "LameLinkedList.h"
 
-class SortedList : LameLinkedList
+class SortedList : public LameLinkedList
 {
 private:
-	int length;
+	int length = 0;
 	void insertMid(Node);
 	bool searchVal(string);
+	Node* head;
 
 public:
 	SortedList();
 	SortedList(string);
+
+	void printList();
 
 	string searchList(int);
 	void insert(string);

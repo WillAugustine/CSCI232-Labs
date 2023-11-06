@@ -14,7 +14,9 @@ LameLinkedList::LameLinkedList(string s)
 
 void LameLinkedList::printList()
 {
+	cout << "entering printList" << endl;
 	Node* currNode = this->head;
+	cout << "set currNode where data = '" << currNode->data << "'" << endl;
 	while (currNode != NULL)
 	{
 		cout << currNode->data << " -> ";
