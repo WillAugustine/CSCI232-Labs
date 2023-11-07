@@ -29,6 +29,9 @@ Labs and my personal solutions to all Data Structures & Algorithms (CSCI 232) la
   - [SortedList.cpp](03-SortedList/SortedList.cpp)
   - [TestLinkedLists.cpp](03-SortedList/TestLinkedLists.cpp)
 
+- Lab 4 - GitHub:
+  - [.gitignore](04-GitHub/.gitignore)
+
 ## Grading Rubrics:
 - [Lab 1](Grading/Lab1-Grader.xlsm)
 - [Lab 2](Grading/Lab2-Grader.xlsm)
