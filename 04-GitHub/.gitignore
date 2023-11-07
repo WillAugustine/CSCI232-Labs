@@ -1,0 +1,26 @@
+#
+# .gitignore for GitHub lab
+#
+# Author: Will Augustine
+#
+
+# Remove whole NOT-Important directory
+NOT-Important/
+
+# Remove all Python files from SEMI-Important
+SEMI-Important/*.py
+
+# Remove .vs directory from Important directory
+Important/.vs
+
+# Remove Important.vcxproj.filters from Important directory (multiple solutions listed)
+Important/Important.vcxproj.filters
+Important/*.filters
+
+# Remove Important.vcxproj.user from Important directory (multiple solutions listed)
+Important/Important.vcxproj.user
+Important/*.user
+
+# Other possible solutions to remove Important.vcxproj files from Important directory
+Important/*.vcxproj.*
+Important/Important.vcxproj.*
