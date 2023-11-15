@@ -31,9 +31,14 @@ Labs and my personal solutions to all Data Structures & Algorithms (CSCI 232) la
 
 - Lab 4 - GitHub:
   - [.gitignore](04-GitHub/.gitignore)
+ 
+- Lab 5 - Stacks & Queues:
+  - [Stack.h](05-StackQueue/Stacks_Queues/Stack.h)
+  - [Queue.h](05-StackQueue/Stacks_Queues/Queue.h)
 
 ## Grading Rubrics:
 - [Lab 1](Grading/Lab1-Grader.xlsm)
 - [Lab 2](Grading/Lab2-Grader.xlsm)
 - [Lab 3](Grading/Lab3-Grader.xlsm)
 - [Lab 4](Grading/Lab4-Grader.xlsm)
+- [Lab 5](Grading/Lab5-Grader.xlsm)
