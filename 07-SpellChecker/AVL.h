@@ -11,18 +11,27 @@ The header file for the AVL class
 #include <chrono>
 #include <iostream>
 
+// Standard namespace
 using namespace std;
 
+// Namespace for keeping track of time
 using namespace chrono;
 
+// The AVL class
 class AVL
 {
+// Variables and methods only accessible to the AVL class
 private:
+    // Struct that represents a node in the tree
     struct Node
     {
+        // The node's data
         string key;
+        // The child node to the left
         Node* left;
+        // The child node to the right
         Node* right;
+        // The height of the node
         int height;
     };
 
@@ -48,15 +57,18 @@ private:
     int findWord(Node* root, string key, int count);
 
 public:
-    // Default constructor
+    // Constructor that reads in the words from the inputted file
     AVL(string filename);
 
-    // Public function to insert a string into the AVL tree
+    // Insert a string into the AVL tree
     void insert(string s);
 
-    // Public function to find a word in the AVL tree
+    // Trys to find a word in the AVL tree
     int findWord(string s, int count = 1);
 
-    // Public function to return the word on the top of the AVL tree
+    // Gets the height of the AVL tree
+    int getHeight();
+
+    // Return the word on the top of the AVL tree
     string getTopWord();
 };

@@ -57,6 +57,8 @@ int main()
 	cout << "Creating BST object" << endl;
 	BST bst(fileName);
 
+	cout << "The height of the BST is " << bst.getHeight() << endl;
+
 	string topWord = bst.getTopWord();
 	cout << "\tThe top word on the tree is '" << topWord << "'" << endl;
 	cout << "Searching for the top word in the tree (" << topWord << ")" << endl;
@@ -78,6 +80,8 @@ int main()
 
 	cout << "Creating AVL object" << endl;
 	AVL avl(fileName);
+
+	cout << "The height of the AVL tree is " << avl.getHeight() << endl;
 
 	topWord = avl.getTopWord();
 	cout << "\tThe top word on the tree is '" << topWord << "'" << endl;
