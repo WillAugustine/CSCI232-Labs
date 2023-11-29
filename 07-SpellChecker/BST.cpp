@@ -1,269 +1,127 @@
-// -----------------------------------------------------------------------------
-// CSCI 232 Data Structures
-// Programming Lab Assignment 7
-// Assignment Parts 4, 5, and 6
-// File Name: BST.cpp
-// Author: Jason Decker
-// 
-// Description: C++ file to define the functions of the binary search tree (BST) class 
-//	Part 4: Implement a Binary Search Tree. Read the text file into the tree.
-//  Part 5:	Measure the execution time of finding words in the tree.
-//  Part 6: Count the number of levels of the BST.
-// -----------------------------------------------------------------------------
+/*
+Author: Will Augustine
+Assignment: CSCI 232 Lab 7
+File: BST.cpp
 
-#include <iostream>
-#include <string>
-#include <fstream>
-#include <chrono>
-#include <cmath>
-#include <stdio.h>
-#include <stdlib.h>
-#include <iostream>
+The implementation file for the BST class
+*/
 
-using namespace std;
+#include "BST.h"
 
-using namespace chrono;
+/*
+Parameterized constructor for the BST class. Reads the inputted file and inserts each word
+    in the text file into the BST.
 
-#pragma once
+Inputs:
+    string filename: The file to be read
 
-class BST {
+Outputs: None
+*/
+BST::BST(string filename) : root(nullptr) {
+    // Open the inputted file
+    ifstream file(filename);
 
-	struct node {
-		string data;
-		node* left;
-		node* right;
-	};
+    // If the file could not open, let the user know
+    if (!file.is_open()) {
+        cerr << "Error opening file: " << filename << endl;
+        return;
+    }
 
-	int maxLevel = 0;
+    // Variable to store the current word (one word per line) in the inputted file
+    string word;
+    while (file >> word) {
+        // Add the word to the BST
+        insert(word);
+    }
 
-	node* root;
+    // Close the file
+    file.close();
+}
 
-	node* insert(string s, node* t) {
-		
-		if (t == NULL) {
-			t = new node;
-			t->data = s;
-			t->left = t->right = NULL;
-			//if (maxLevel < level) {
-			//	maxLevel = level;
-			//}
-			//cout << level;
-		}
-		else if (s < t->data) {
-			t->left = insert(s, t->left);
-			//cout << level;
-		}
-		else if (s > t->data) {
-			t->right = insert(s, t->right);
-			//cout << level;
-		}
-		return t;
-	}
+/*
+Private part of the insert method. Inserts a node recursively into the BST
 
+Inputs:
+    Node* root: The top Node object of the BST subtree
+    string key: The string you are trying to input
 
-	/*
-	node* findMin(node* t) {
-		if (t == NULL) {
-			return NULL;
-		}
-		else if (t->left == NULL) {
-			return t;
-		}
-		else
-			return findMin(t->left);
-	}
+Outputs: None
+*/
+BST::Node* BST::insert(Node* root, string key) {
+    // If you are at the end of the BST, insert the new node
+    if (root == nullptr)
+        return new Node{ key, nullptr, nullptr };
 
-	node* findMax(node* t) {
-		if (t == NULL) {
-			return NULL;
-		}
-		else if (t->right == NULL) {
-			return t;
-		}
-		else
-			return findMax(t->right);
-	}
-	
-	node* remove(string s, node* t) {
-		node* temp;
-		if (t == NULL)
-			return NULL;
-		else if (s < t->data)
-			t->left = remove(s, t->left);
-		else if (s > t->data)
-			t->right = remove(s, t->right);
-		else if (t->left and t->right) {
-			temp = findMin(t->right);
-			t->data = temp->data;
-			t->right = remove(t->data, t->right);
-		}
-		else {
-			temp = t;
-			if (t->left == NULL)
-				t = t->right;
-			else if (t->right == NULL)
-				t = t->left;
-			delete temp;
-		}
-		return t;
-	}
-	*/
-	void inorder(node* t) {
-		if (t == NULL)
-			return;
-		inorder(t->left);
-		cout << t->data << " " << endl;
-		inorder(t->right);
-	}
-	
-	node* find(node* t, string s) {
-		if (t == NULL)
-			return NULL;
-		else if (s < t->data)
-			return find(t->left, s);
-		else if (s > t->data)
-			return find(t->right, s);
-		else
-			return t;
-	}
+    if (key < root->key)
+        root->left = insert(root->left, key);
+    else if (key > root->key)
+        root->right = insert(root->right, key);
 
-public:
-	BST() { // Create an empty BST
-		root = NULL;
-	}
+    return root;
+}
+
+// Public function to insert a string into the BST tree
+void BST::insert(string s) {
+    root = insert(root, s);
+}
+
+// Helper function to find a word in the BST tree
+int BST::findWord(Node* root, string key, int count) {
+    if (root == nullptr)
+        return count; // Word not found
+
+    if (key < root->key)
+        return findWord(root->left, key, count + 1);
+    else if (key > root->key)
+        return findWord(root->right, key, count + 1);
+    else
+        return count; // Word found
+}
+
+// Public function to find a word in the BST tree
+int BST::findWord(string s, int count) {
+
+    // Record start time for beginning of the action
+    auto start = high_resolution_clock::now();
+
+    int numOfComparisions = findWord(root, s, count);
+
+    // Record stop time for end of action
+    auto stop = high_resolution_clock::now();
+
+    // Calculate duration of action in microseconds
+    auto duration = duration_cast<microseconds>(stop - start);
+
+    // Convert duration to seconds
+    auto seconds = duration / 1000000;
+
+    // Let the user know the execution time
+    cout << "\tFound the word in " << duration.count() << " microseconds (" << seconds.count() << " seconds)." << endl;
 
 
-	bool isEmpty() {
-		if (root == NULL) {
-			return true;
-		}
-		return false;
-	}
+    return numOfComparisions;
+}
 
-	void insert(string s, int level = 10) {
-		root = insert(s, root);
-		if (maxLevel < level) {
-			maxLevel = level;
-		}
-		level++;
-	}
-	/*
-	void remove(string s) {
-		root = remove(s, root);
-	}
-	*/
-	void display() {
+// Helper function to calculate the height of the BST
+int BST::getHeightHelper(Node* root) {
+    if (root == nullptr)
+        return 0;
 
-		// Record start time for printing the BST
-		auto startPrintBST = high_resolution_clock::now();
+    int leftHeight = getHeightHelper(root->left);
+    int rightHeight = getHeightHelper(root->right);
 
-		inorder(root);
+    return max(leftHeight, rightHeight) + 1;
+}
 
-		cout << endl;
-		
-		// Record stop time for printing the BST
-		auto stopPrintBST = high_resolution_clock::now();
+// Public function to get the height of the BST
+int BST::getHeight() {
+    return getHeightHelper(root);
+}
 
-		// Calculate duration of printing the BST in microseconds
-		auto durationPrintBST = duration_cast<microseconds>(stopPrintBST - startPrintBST);
-
-		// Calculate duration of printing the BST in seconds
-		auto printSeconds = durationPrintBST / 1000000;
-
-		// Output the time for printing the BST
-		cout << "The BST was printed in " << durationPrintBST.count() << " microseconds (" << printSeconds.count() << " seconds)." << endl;
-	}
-
-	void search(string s) {
-
-		// Record start time for finding the word
-		auto start = high_resolution_clock::now();
-
-		root = find(root, s);
-		
-		// Record stop time for finding the word
-		auto stop = high_resolution_clock::now();
-
-		// Calculate the duration of finding the word
-		auto duration = duration_cast<microseconds>(stop - start);
-
-		// Calculate duration of finding the word in seconds
-		auto durationSeconds = duration_cast<seconds>(stop - start);
-
-		if (root == NULL) // Output the time to finde a word that doesn't exist
-			cout << "The word '" << s << "' does not exist. The search was completed in "
-				<< duration.count() << " micorseconds (" << durationSeconds.count() << " seconds)." << endl;
-		else // Output the time to find the word
-			cout << "The word '" << s << "' was found in " << duration.count() << " microseconds (" << durationSeconds.count() << " seconds)." << endl;
-	}
-	int getMaxLevel() {
-		cout << "The total number of levels for the BST is " << maxLevel << endl;
-		return maxLevel;
-	}
-};
-
-	int main() {
-
-		BST a; // Create and empty binary search tree
-
-		string myArray[1600]; // Create an array to read in the text file
-
-		ifstream file("dictionary1600.txt"); // Input stream to operate on file
-
-		// Record start time for reading in the text file
-		auto start = high_resolution_clock::now();
-
-		// Statement to read in the words from the text file
-		if (file.is_open()) {
-
-			// Record start time for building the BST
-			auto startBuildBST = high_resolution_clock::now();
-
-			for (int i = 0; i < 1600; ++i) { // for loop to add each word
-				file >> myArray[i]; // Add each word to the array
-				a.insert(myArray[i]); // Add each word to the BST
-			}
-
-			// Record stop time for  reading in the text file and building the BST
-			auto stopBuildBST = high_resolution_clock::now();
-			auto stop = stopBuildBST;
-
-			// Calculate duration of reading in the text file in microseconds
-			auto totalduration = duration_cast<microseconds>(stop - start);
-
-			// Calculate duration of reading in the text file in seconds
-			auto durationSeconds = totalduration / 1000000;
-
-			// Calculate time for building the BST in microseconds
-			auto durationBuildBST = duration_cast<microseconds>(stopBuildBST - startBuildBST);
-
-			// Calculate time for building the BST in seconds
-			auto buildSeconds = durationBuildBST / 1000000;
-
-			// Output the time for reading in the text file
-			cout << "The text file was read in " << totalduration.count() << " microseconds (" << durationSeconds.count() << " seconds)." << endl;
-
-			// Output the time for building the BST
-			cout << "The BST was built in " << durationBuildBST.count() << " microseconds (" << buildSeconds.count() << " seconds)." << endl;
-		}
-
-		//a.display(); // Print the BST
-
-		BST ci = a; // Create a copy of the BST 'a' called 'ci'
-		BST basics = a; // Create a copy of the BST 'a' called 'basics'
-		BST zebra = a; // Create a copy of the BST 'a' called  'zebra'
-
-		a.getMaxLevel();
-
-		// Search for the first word in the BST 'a'
-		a.search("a");
-
-		// Searth for the last word in the BST 'ci'
-		ci.search("ci");
-
-		// Search for the middle word in the BST 'basics'
-		basics.search("basics");
-
-		// Searchy for a word that does not exist
-		zebra.search("zebra");
-	};
+string BST::getTopWord() {
+    if (root == nullptr) {
+        cerr << "Error: Tree is empty." << endl;
+        return "";
+    }
+    return this->root->key;
+}
